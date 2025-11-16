@@ -155,7 +155,7 @@ A rede foi estruturada seguindo o modelo hierárquico tradicional, permitindo ob
 
 A seguir, apresenta-se um diagrama conceitual da topologia da rede:
 
-![DiagramaConceitual](DiagramaConceitualA1B2RCII.drawio.png)
+![DiagramaConceitual](DiagramConceitualA1B2RCII.drawio.png)
 
 Essa arquitetura permite observar o comportamento dos protocolos em situações de falha simulada, cortes de enlaces, mudanças de papéis de porta e análise do tempo de convergência em cada camada.
 
