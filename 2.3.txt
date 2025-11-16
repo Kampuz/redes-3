@@ -1,0 +1,68 @@
+Switch#show spanning-tree 
+VLAN0001
+  Spanning tree enabled protocol ieee
+  Root ID    Priority    4097
+             Address     0060.2FB3.67DA
+             This bridge is the root
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    4097  (priority 4096 sys-id-ext 1)
+             Address     0060.2FB3.67DA
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  20
+
+Interface        Role Sts Cost      Prio.Nbr Type
+---------------- ---- --- --------- -------- --------------------------------
+Fa01            Desg FWD 19        128.1    P2p
+Fa02            Desg FWD 19        128.2    P2p
+
+VLAN0010
+  Spanning tree enabled protocol ieee
+  Root ID    Priority    4106
+             Address     0060.2FB3.67DA
+             This bridge is the root
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    4106  (priority 4096 sys-id-ext 10)
+             Address     0060.2FB3.67DA
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  20
+
+Interface        Role Sts Cost      Prio.Nbr Type
+---------------- ---- --- --------- -------- --------------------------------
+Fa01            Desg FWD 19        128.1    P2p
+Fa02            Desg FWD 19        128.2    P2p
+
+VLAN0020
+  Spanning tree enabled protocol ieee
+  Root ID    Priority    4116
+             Address     0060.2FB3.67DA
+             This bridge is the root
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    4116  (priority 4096 sys-id-ext 20)
+             Address     0060.2FB3.67DA
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  20
+
+Interface        Role Sts Cost      Prio.Nbr Type
+---------------- ---- --- --------- -------- --------------------------------
+Fa01            Desg FWD 19        128.1    P2p
+Fa02            Desg FWD 19        128.2    P2p
+
+VLAN0030
+  Spanning tree enabled protocol ieee
+  Root ID    Priority    4126
+             Address     0060.2FB3.67DA
+             This bridge is the root
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+
+  Bridge ID  Priority    4126  (priority 4096 sys-id-ext 30)
+             Address     0060.2FB3.67DA
+             Hello Time  2 sec  Max Age 20 sec  Forward Delay 15 sec
+             Aging Time  20
+
+Interface        Role Sts Cost      Prio.Nbr Type
+---------------- ---- --- --------- -------- --------------------------------
+Fa01            Desg FWD 19        128.1    P2p
+Fa02            Desg FWD 19        128.2    P2p
