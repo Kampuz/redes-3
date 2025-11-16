@@ -10,17 +10,17 @@ Redes de Computadores II
 
 ## 1.1 Introdução
 
-Um loop de rede ocorre quando ocorre uma conexão entre duas portas de uma tomada de rede, essa ligação cria um loop de rede ethernet, esse tipo de ocorrência pode ser acidental ou intencional, em caso de necessidade de conferir falhas na infraestrutura da rede.
+Um loop de rede ocorre quando há uma conexão entre duas portas de uma tomada de rede. Essa ligação cria um loop de rede Ethernet. Tal situação pode ser acidental ou intencional, em caso de necessidade de conferir falhas na infraestrutura da rede.
 
-Este tipo de ocorrência deve ser feitas cautela pois esse tipo de ocorrência apresenta alguns problemas que afetam o desempenho da rede:
+Esse tipo de ocorrência deve ser feito com cautela, pois apresenta alguns problemas que afetam o desempenho da rede:
 
-- **Broadcast storm**, onde quadros de broadcast seriam retransmitidos de forma excessiva na rede, pois os switches retransmitem quadros em broadcast através de suas demais portas, e quando há um caminho fechado, os quadros são retransmitidos continuamente pelos switches, inundando a rede, e consumindo a sua capacidade.
-- **Instabilidade na tabela MAC nos switches**, cada switch tem uma tabela que mapeia endereços físicos MAC de dispositivos para as portas correspondentes em um switch, essa tabela então indica a porta por onde um quadro deve ser retransmitido para que seja transmitido para seu endereço MAC de destino. Como essa tabela é dinâmica, ela é constantemente atualizada e sobrescrita criando conflitos.
-- **Múltiplos quadros repetidos recebidos em cada host**, cada quadro recebido também tem que ser processado, e isso cria um peso para o equipamento final no tempo de processamento desses quadros repetidos.
+- **Broadcast storm**, onde quadros de broadcast são retransmitidos de forma excessiva na rede, pois os switches retransmitem quadros em broadcast através de suas demais portas. Quando há um caminho fechado, os quadros são retransmitidos continuamente pelos switches, inundando a rede e consumindo sua capacidade.
+- **Instabilidade na tabela MAC nos switches**, pois cada switch tem uma tabela que mapeia endereços físicos MAC de dispositivos para as portas correspondentes. Essa tabela indica a porta por onde um quadro deve ser retransmitido para que chegue ao endereço MAC de destino. Como essa tabela é dinâmica, ela é constantemente atualizada e sobrescrita, criando conflitos.
+- **Múltiplos quadros repetidos recebidos em cada host**, pois cada quadro recebido também precisa ser processado, o que gera carga adicional para o equipamento final no tempo de processamento desses quadros repetidos.
 
-Afim de impedir que loops em redes façam de circular pacotes continuamente foi criado o protocolo STP, ou Protocolo Spanning Tree, que soluciona o problema de loops em redes LAN, conferindo a redundância na rede, bloqueando alguns caminhos garantindo que os dados se movam eficientemente.
+A fim de impedir que loops em redes façam circular pacotes continuamente, foi criado o protocolo STP, ou Protocolo Spanning Tree, que soluciona o problema de loops em redes LAN, conferindo redundância à rede e bloqueando alguns caminhos, garantindo que os dados se movam eficientemente.
 
-Nas próximas seções desse trabalho serão tratados de forma mais aprofundada os protocolos STP, RSTP e MSTP, conceitos fundamentais para compreensão do funcionamento e entendimento dos protocolos, a arquitetura de rede proposta para a segunda parte do trabalho e o plano de endereçamento IP e VLANs definidas.
+Nas próximas seções deste trabalho serão tratados, de forma mais aprofundada, os protocolos STP, RSTP e MSTP, conceitos fundamentais para compreensão do funcionamento e entendimento dos protocolos, a arquitetura de rede proposta para a segunda parte do trabalho e o plano de endereçamento IP e VLANs definido.
 
 ## 1.2 Protocolos STP, RSTP e MSTP
 
@@ -90,18 +90,45 @@ Entretanto, é necessário bom planejamento para evitar caminhos subótimos e ci
 
 ## 1.3 Conceitos Fundamentais
 
-> *Explicar os **conceitos fundamentais**:*
-> 
-> - *Root Bridge*
-> - *Port States (Blocking, Listening, Learning, Forwarding)*
-> - *Bridge ID e Path Cost*
-> - *Eleição e convergência da topologia*
+Embora os protocolos apresentem variações em desempenho e funcionamento, todos compartilham um conjunto de conceitos fundamentais que definem como a topologia livre de loops é construída. A seguir serão apresentados os principais elementos comuns aos protocolos da família Spanning Tree.
 
+### 1.3.1 Root Bridge
 
+A Root Bridge é o elemento central da Spanning Tree. Ela representa o ponto de referência de toda a topologia lógica e é escolhida através de um processo de eleição entre todos os switches que participam do protocolo.
+
+A Root Bridge sempre possui o menor Bridge ID e, a partir dela, os demais switches calculam os caminhos de menor custo para chegarem à raiz, determinando o papel das portas e como o tráfego será encaminhado.
+
+### 1.3.2 Bridge ID
+
+O Bridge ID é a identificação única de cada switch e é composto por dois elementos: a prioridade do bridge e o endereço MAC do switch. O valor mais baixo representa o switch mais preferencial. Esse identificador é usado durante a eleição da Root Bridge e na determinação dos caminhos da topologia.
+
+### 1.3.3 Eleição
+
+O processo de eleição é responsável por determinar qual switch será a Root Bridge. Os switches elegem com base no Bridge ID, sendo escolhido aquele com o menor valor. Quando um switch inicializa-se, ele não sabe o valor do ID de todos os outros switches da topologia e então se elege como Root Bridge. Quando ele recebe um BPDU com um BID root menor que o dele, ele imediatamente para de anunciar-se como root e começa a encaminhar o valor do Root Bridge superior.
+
+### 1.3.4 Path Cost
+
+O Path Cost é o custo associado às portas dos switches e depende da velocidade do enlace. Quanto maior a largura de banda, menor é o custo. Esse valor é utilizado para calcular o caminho mais eficiente até a Root Bridge. Em caso de múltiplas rotas possíveis, o caminho com o menor custo total é selecionado como o caminho principal.
+
+### 1.3.5 Port States
+
+Para evitar loops, os switches operam suas portas em estados específicos que definem como cada porta participa da Spanning Tree. Discarding, Learning e Forwarding foram os estados explicados no RSTP, mas para o STP são cinco estados: Disabled, Blocking, Listening, Learning e Forwarding.
+
+O primeiro não participa nos cálculos; o segundo ocorre na primeira inicialização, não encaminhando nenhum tráfego e apenas aguardando por BPDUs, aprendendo a topologia sem causar loops; o terceiro não encaminha frames, mas começa a enviar e receber BPDUs, auxiliando a anunciar sua presença e a se preparar para se unir à topologia; o quarto é a fase em que começa a aprender os endereços MAC observando os frames encaminhados, mas ainda sem encaminhar tráfego; e, finalmente, o quinto estado ocorre quando a porta é selecionada para ser parte da topologia sem loops, podendo tanto enviar quanto receber frames e BPDUs.
+
+Esses estados são fundamentais para controlar o encaminhamento e garantir que a topologia lógica esteja estável antes de permitir o tráfego completo.
+
+### 1.3.6 Detecção de Loops
+
+Assim que a eleição do root é completada, os switches começam a identificar loops. Os switches entendem que há um loop quando recebem BPDUs da Root Bridge por mais de uma interface; portanto, se receberem esses BPDUs por mais de uma porta, deve haver um loop, e essa porta deve ser colocada no estado de blocking.
+
+### 1.3.7 Convergência
+
+A convergência ocorre quando todos os switches da rede finalizam seus cálculos, selecionam os papéis das portas e ajustam seus estados, resultando em uma topologia estável e livre de ciclos. Tanto no STP quanto em suas versões mais modernas, esse processo garante que, mesmo com redundância física, a rede mantenha uma rota lógica confiável para o tráfego.
 
 ## 1.4 Objetivos Gerais e Específicos
 
-Os objetivos deste trabalho estão divididos em um objetivo geral e pbjetivos específicos, conforme descritos a seguir.
+Os objetivos deste trabalho estão divididos em um objetivo geral e objetivos específicos, conforme descritos a seguir.
 
 ### 1.4.1 Objetivo Geral
 
@@ -117,28 +144,39 @@ Projetar e configurar uma rede corporativa de médio porte utilizando STP, RSTP 
 
 ## 1.5 Arquitetura de Rede Proposta
 
-*Apresentar uma **arquitetura de rede proposta** com a quantidade de equipamentos (switches e computadores) e suas funções.*
+A arquitetura de rede proposta para este projeto foi planejada visando redundância, escalabilidade e fácil gerenciamento. O ambiente simulado representa uma rede corporativa de médio porte, em que múltiplas VLANs coexistem e diferentes funções de camada de acesso, distribuição e núcleo são distribuídas entre os switches da infraestrutura.
 
-*Descreva a topologia geral (quantidade de switches, hosts, servidores, etc.).*
+A topologia geral é composta por:
 
-*Indique funções dos dispositivos (core, distribuição, acesso).*
+- **2 switches de Core**, responsáveis pelo processamento central do tráfego, execução dos protocolos STP/RSTP/MSTP e interligação das instâncias de VLAN.
+- **2 switches de Distribuição**, atuando como camada intermediária entre o núcleo e os switches de acesso, encarregados do roteamento entre VLANs (caso aplicável) e da agregação de links redundantes.
+- **3 switches de Acesso**, responsáveis pela conexão direta com os usuários finais e dispositivos da rede.
+- **12 hosts distribuídos entre departamentos**, utilizados para testes de comportamento dos protocolos e validação da convergência.
+- **1 servidor corporativo**, representando serviços essenciais da empresa (DNS, armazenamento ou autenticação).
 
-*Inclua um diagrama de rede (mesmo que conceitual).*
+A rede foi estruturada seguindo o modelo em camadas para facilitar a aplicação dos protocolos de spanning tree em cenários realistas. Os switches de Core operam como a região central de convergência Spanning Tree (root primária e secundária). Os switches de Distribuição atuam como caminhos alternativos e designados conforme o comportamento de cada protocolo. Os switches de Acesso conectam os usuários e são configurados para receber a propagação das regras da topologia lógica definida pelo STP, RSTP e MSTP.
 
+A seguir, apresenta-se um diagrama conceitual da topologia da rede:
+
+[imagem]
+
+Essa arquitetura permite observar o comportamento dos protocolos em situações de falha simulada, cortes de enlaces, mudanças de papéis de porta e análise do tempo de convergência em cada camada.
 ## 1.6 Endereçamento de IP e Esquema de VLANs
 
-*Elaborar um **endereçamento IP e esquema de VLANs** adequado ao projeto. (item não obrigatório)*
+O endereçamento IP e a definição de VLANs são componentes essenciais para a organização lógica da rede, permitindo que os dispositivos sejam distribuídos de forma estruturada e que o tráfego seja segmentado conforme as necessidades operacionais da infraestrutura. A segmentação por VLANs possibilita separar departamentos, funções ou grupos específicos de equipamentos, reduzindo o domínio de broadcast e aumentando a segurança e o desempenho.
 
-*Mostre o plano de endereçamento IP e as VLANs definidas.*
+A definição de um esquema de VLANs permite que o tráfego seja isolado em nível de camada 2, enquanto o plano de endereçamento IP garante que cada segmento possua sua própria faixa de endereços, facilitando o roteamento, o controle de acesso e o gerenciamento geral da rede. Em ambientes corporativos, essas divisões lógicas auxiliam na organização do tráfego, na aplicação de políticas de rede e no suporte a múltiplos serviços simultaneamente.
 
-*Explique a lógica de segmentação (por setor, função, departamento, etc.).*
+Além disso, a presença de VLANs influencia diretamente o comportamento dos protocolos STP, RSTP e MSTP, uma vez que a topologia lógica pode variar conforme os segmentos configurados. Protocolos como o MSTP, por exemplo, permitem associar múltiplas VLANs a diferentes instâncias da spanning tree, otimizando caminhos redundantes e distribuindo a carga entre enlaces disponíveis.
 
-*Pode incluir uma tabela com IPs, máscaras, VLAN IDs e descrições.*
+Dessa forma, o endereçamento IP e o esquema de VLANs constituem a base para uma infraestrutura organizada, segura e preparada para operar de maneira eficiente em conjunto com os mecanismos de prevenção de loops analisados neste trabalho.
+
+## Referências Bibliográficas
 
 https://www.pynetlabs.com/spanning-tree-protocol-explained/
 https://www.tp-link.com/br/support/faq/3898/
 https://glmtec.com.br/entenda-o-loop-de-rede-e-como-preveni-lo/
-https://www.cisco.com/c/pt_br/support/docs/lan-switching/spanning-tree-protocol-stp-8021d/221722-troubleshoot-mac-flaps-loop-on-cisco-cat.html?utm_source=chatgpt.com
+https://www.cisco.com/c/pt_br/support/docs/lan-switching/spanning-tree-protocol-stp-8021d/221722-troubleshoot-mac-flaps-loop-on-cisco-cat.html?
 https://moodle3.ifsc.edu.br/mod/book/view.php?id=312208&chapterid=56881&lang=pt_br
 https://www.networkacademy.io/ccna/spanning-tree/how-stp-works
 https://www.networkacademy.io/ccna/spanning-tree/introduction-to-rapid-pvst
