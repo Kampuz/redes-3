@@ -678,7 +678,7 @@ Os modelos de switches utilizados no simulador não oferecem suporte ao modo MST
 
 \subsection{Conclusão}
 Para os testes foi feito o ping entre dois computadores pertencentes a mesma LAN (10) mas em switchs de distribuição diferentes (Dist1 e Dist2)
-e para testar o teste de conexão foi cronometrado o tempo que os pacotes demoravam para voltar a serem enviados corretamente
+e para testar o teste de conexão foi cronometrado o tempo que os pacotes demoravam para voltar a serem enviados corretamente.
 O protocolo RSTP se mostrou o melhor para a situação.
 
 \hypertarget{referuxeancias-bibliogruxe1ficas}{%
