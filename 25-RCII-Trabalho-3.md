@@ -7,7 +7,6 @@ Abigail Sayury Nakashima e Miguel de Campos Rodrigues Moret
 Redes de Computadores II
 
 2025
-
 ## 1.1 Introdução
 
 Um loop de rede ocorre quando há uma conexão entre duas portas de uma tomada de rede. Essa ligação cria um loop de rede Ethernet. Tal situação pode ser acidental ou intencional, em caso de necessidade de conferir falhas na infraestrutura da rede.
@@ -148,19 +147,18 @@ A arquitetura de rede proposta para este projeto foi planejada visando redundân
 
 A topologia geral é composta por:
 
-- **2 switches de Core**, responsáveis pelo processamento central do tráfego, execução dos protocolos STP/RSTP/MSTP e interligação das instâncias de VLAN.
-- **2 switches de Distribuição**, atuando como camada intermediária entre o núcleo e os switches de acesso, encarregados do roteamento entre VLANs (caso aplicável) e da agregação de links redundantes.
-- **3 switches de Acesso**, responsáveis pela conexão direta com os usuários finais e dispositivos da rede.
-- **12 hosts distribuídos entre departamentos**, utilizados para testes de comportamento dos protocolos e validação da convergência.
-- **1 servidor corporativo**, representando serviços essenciais da empresa (DNS, armazenamento ou autenticação).
+- **2 switches de Core**, responsáveis pelo processamento central do tráfego, pela coordenação da topologia lógica dos protocolos STP, RSTP e MSTP e pela interligação entre os principais segmentos da rede.
+- **2 switches de Distribuição**, atuando como camada intermediária entre o núcleo e os pontos de acesso, agregando enlaces redundantes e auxiliando no controle do fluxo entre os diferentes setores da rede.
+- **10 hosts distribuídos**, utilizados para representar estações de trabalho e validar o funcionamento dos protocolos em condições próximas às de um ambiente corporativo real.
 
-A rede foi estruturada seguindo o modelo em camadas para facilitar a aplicação dos protocolos de spanning tree em cenários realistas. Os switches de Core operam como a região central de convergência Spanning Tree (root primária e secundária). Os switches de Distribuição atuam como caminhos alternativos e designados conforme o comportamento de cada protocolo. Os switches de Acesso conectam os usuários e são configurados para receber a propagação das regras da topologia lógica definida pelo STP, RSTP e MSTP.
+A rede foi estruturada seguindo o modelo hierárquico tradicional, permitindo observar o comportamento dos protocolos de Spanning Tree de maneira organizada. Os switches de Core desempenham o papel central na convergência da topologia, atuando como referências primária e secundária no cálculo da árvore livre de loops. Os switches de Distribuição formam caminhos alternativos e designados conforme as decisões dos protocolos, garantindo redundância e estabilidade no tráfego. Já os hosts representam os dispositivos finais conectados à arquitetura, permitindo a análise do encaminhamento, da convergência e das possíveis alterações na rede durante testes práticos.
 
 A seguir, apresenta-se um diagrama conceitual da topologia da rede:
 
-[imagem]
+![DiagramaConceitual](DiagramaConceitualA1B2RCII.drawio.png)
 
 Essa arquitetura permite observar o comportamento dos protocolos em situações de falha simulada, cortes de enlaces, mudanças de papéis de porta e análise do tempo de convergência em cada camada.
+
 ## 1.6 Endereçamento de IP e Esquema de VLANs
 
 O endereçamento IP e a definição de VLANs são componentes essenciais para a organização lógica da rede, permitindo que os dispositivos sejam distribuídos de forma estruturada e que o tráfego seja segmentado conforme as necessidades operacionais da infraestrutura. A segmentação por VLANs possibilita separar departamentos, funções ou grupos específicos de equipamentos, reduzindo o domínio de broadcast e aumentando a segurança e o desempenho.
@@ -173,12 +171,24 @@ Dessa forma, o endereçamento IP e o esquema de VLANs constituem a base para uma
 
 ## Referências Bibliográficas
 
-https://www.pynetlabs.com/spanning-tree-protocol-explained/
-https://www.tp-link.com/br/support/faq/3898/
-https://glmtec.com.br/entenda-o-loop-de-rede-e-como-preveni-lo/
-https://www.cisco.com/c/pt_br/support/docs/lan-switching/spanning-tree-protocol-stp-8021d/221722-troubleshoot-mac-flaps-loop-on-cisco-cat.html?
-https://moodle3.ifsc.edu.br/mod/book/view.php?id=312208&chapterid=56881&lang=pt_br
-https://www.networkacademy.io/ccna/spanning-tree/how-stp-works
-https://www.networkacademy.io/ccna/spanning-tree/introduction-to-rapid-pvst
-https://maisvch.com/pt/blog/qual-e-a-diferenca-entre-stp-mstp-pvst-e-rstp/
-https://www.pynetlabs.com/what-is-mstp-protocol/
+PYNET LABS. **What Is Spanning Tree Protocol (STP) and How It works?** Disponível em: <https://www.pynetlabs.com/spanning-tree-protocol-explained/>. Acesso em: 16 nov. 2025.
+
+GLMTEC. **Entenda O Loop De Rede E Como Preveni-lo**. Disponível em: <https://glmtec.com.br/entenda-o-loop-de-rede-e-como-preveni-lo/>. Acesso em: 16 nov. 2025.
+
+IFSC. **Redes locais: Caminhos Fechados Em LANs (loops)**. Disponível em: <https://moodle3.ifsc.edu.br/mod/book/view.php?id=312208&chapterid=56881&lang=pt_br>. Acesso em: 16 nov. 2025.
+
+IVANOV, I. **How Spanning-Tree works?** Disponível em: <https://www.networkacademy.io/ccna/spanning-tree/how-stp-works>. Acesso em: 16 nov. 2025.
+
+IVANOV, I. **Introduction to Rapid PVST+**. Disponível em: <https://www.networkacademy.io/ccna/spanning-tree/introduction-to-rapid-pvst>. Acesso em: 16 nov. 2025.
+
+PYNET LABS. **What Is Spanning Tree Protocol (STP) and How It works?** Disponível em: <https://www.pynetlabs.com/spanning-tree-protocol-explained/>. Acesso em: 16 nov. 2025.
+
+PYNET LABS. **What Is MSTP Protocol (Multiple Spanning Tree Protocol)?** Disponível em: <https://www.pynetlabs.com/what-is-mstp-protocol/>.
+
+TECNOLOGIA MAISVCH. **Compreendendo Os Protocolos STP, RSTP, PVST E MSTP: Principais Diferenças E Benefícios - Maisvch Technology**. Disponível em: <https://maisvch.com/pt/blog/qual-e-a-diferenca-entre-stp-mstp-pvst-e-rstp/>. Acesso em: 16 nov. 2025.
+
+TP-LINK. **Práticas Recomendadas Para Evitar Loops De Rede Com a Solução Omada SDN | TP-Link Brasil**. Disponível em: <https://www.tp-link.com/br/support/faq/3898/>. Acesso em: 16 nov. 2025.
+
+ZEYA, S.; KALAWAT, A. **Identificar E Solucionar Problemas De Flaps/Loop MAC Em Switches Cisco Catalyst**. Disponível em: <https://www.cisco.com/c/pt_br/support/docs/lan-switching/spanning-tree-protocol-stp-8021d/221722-troubleshoot-mac-flaps-loop-on-cisco-cat.html>. Acesso em: 16 nov. 2025.
+
+‌
