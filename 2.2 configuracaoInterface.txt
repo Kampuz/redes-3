@@ -1,13 +1,3 @@
-Core1 - Core2 - Dis1 - Dis2
-enable
-conf t
-vlan 10
-name ADMIN
-vlan 20
-name FINANCEIRO
-vlan 30
-name TI
-
 Core1
 enable
 conf t
